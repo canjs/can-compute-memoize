@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/canjs/canjs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/canjs/canjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/canjs/can-compute-memoize/blob/master/LICENSE)[![npm version](https://badge.fury.io/js/can-compute-memoize.svg)](https://www.npmjs.com/package/can-compute-memoize)[![Build Status](https://travis-ci.org/canjs/can-compute-memoize.svg?branch=master)](https://travis-ci.org/canjs/can-compute-memoize)
 
-A helper to memoize an instance of can-compute.
+Takes a function and returns a memoized compute.
 
 ## Documentation
 
