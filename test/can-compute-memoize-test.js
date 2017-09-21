@@ -1,5 +1,5 @@
 var DefineMap = require("can-define/map/map");
-var qunit = require('steal-qunit');
+var QUinit = require('steal-qunit');
 var sinon = require('sinon');
 
 var memoize = require('../can-compute-memoize');
@@ -9,16 +9,20 @@ var withArgs = sandbox.spy(function () {
 	return arguments[arguments.length - 1].prop;
 });
 var withoutArgs = sandbox.spy(function () {
-	return 'qux'
+	return 'qux';
+});
+var concatArgs = sandbox.spy(function () {
+	return toArray(arguments).join('');
 });
 var defineMap = new DefineMap({
 	callWithArgs: function () {
-		var args = Array.prototype.slice.call(arguments);
-		var fn = memoize(this, 'withArgs', args, withArgs);
-		return fn;
+		return memoize(this, 'withArgs', toArray(arguments), withArgs);
 	},
 	callWithoutArgs: function () {
 		return memoize(this, 'withoutArgs', [], withoutArgs);
+	},
+	concatArgs: function () {
+		return memoize(this, 'concatArgs', toArray(arguments), concatArgs);
 	}
 });
 var foo = {
@@ -28,43 +32,71 @@ var bar = {
 	prop: 'bar'
 };
 
+function toArray(arrayLike) {
+	return Array.prototype.slice.call(arrayLike);
+}
+
 function loop(fn, count) {
 	while (count--) {
 		fn();
 	}
 }
 
-qunit.module('can-compute-memoize', {
+QUinit.module('can-compute-memoize', {
 	beforeEach: function () {
 		memoize.clear();
 		sandbox.reset();
 	}
 });
 
-qunit.test('should be called once for each set of matching args', function () {
+QUinit.test('should be called once for each set of matching args', function () {
 	loop(function () {
 		defineMap.callWithArgs(foo);
 	}, 5);
-	qunit.equal(withArgs.callCount, 1);
-	qunit.ok(withArgs.returned('foo'));
+	QUinit.equal(withArgs.callCount, 1);
+	QUinit.ok(withArgs.returned('foo'));
 
 	loop(function () {
 		defineMap.callWithArgs(foo, bar);
 	}, 5);
-	qunit.equal(withArgs.callCount, 2);
-	qunit.ok(withArgs.returned('bar'));
+	QUinit.equal(withArgs.callCount, 2);
+	QUinit.ok(withArgs.returned('bar'));
 });
 
-qunit.test('should delete cache after removing all observations', function () {
+QUinit.test('should delete cache after removing all observations', function () {
 	var cpt = defineMap.callWithArgs(foo);
-	var handler = function () { };
-	cpt.on('change', handler);
+	cpt.on('change', function () { });
 	cpt.off('change');
+
 	defineMap.callWithArgs(foo);
-	qunit.equal(withArgs.callCount, 2);
+	QUinit.equal(withArgs.callCount, 2);
 });
 
-qunit.test('should be called once with no arguments', function () {
+QUinit.test('should be called once with no arguments', function () {
 	loop(defineMap.callWithoutArgs, 5);
-	qunit.equal(withoutArgs.callCount, 1);
+	QUinit.equal(withoutArgs.callCount, 1);
+});
+
+QUinit.test('should work in browsers that do not support WeekMap', function () {
+	var WM = WeakMap;
+	WeakMap = undefined;
+	memoize.clear();
+
+	loop(function () {
+		var c = defineMap.callWithArgs(foo);
+		QUnit.equal(c(), 'foo');
+	}, 5);
+	QUinit.equal(withArgs.callCount, 5);
+
+	WeakMap = WM;
+});
+
+QUinit.test('should not drop all cache on teardown', function () {
+	defineMap.concatArgs(1, 2, 3);
+	var c = defineMap.concatArgs(1, 'a', 'b');
+	QUinit.equal(concatArgs.callCount, 2);
+	c.on('change', function () { });
+	c.off('change');
+	defineMap.concatArgs(1, 2, 3);
+	QUinit.equal(concatArgs.callCount, 2);
 });
