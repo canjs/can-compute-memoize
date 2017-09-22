@@ -1,6 +1,6 @@
 {
   "name": "can-compute-memoize",
-  "version": "0.0.0-pre.1",
+  "version": "0.0.0",
   "description": "Takes a function and returns a memoized compute.",
   "homepage": "https://canjs.com/",
   "repository": {
