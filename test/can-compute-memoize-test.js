@@ -54,13 +54,13 @@ QUinit.test('should be called once for each set of matching args', function () {
 		defineMap.callWithArgs(foo);
 	}, 5);
 	QUinit.equal(withArgs.callCount, 1);
-	QUinit.ok(withArgs.returned('foo'));
+	QUinit.equal(withArgs.returned('foo'), true);
 
 	loop(function () {
 		defineMap.callWithArgs(foo, bar);
 	}, 5);
 	QUinit.equal(withArgs.callCount, 2);
-	QUinit.ok(withArgs.returned('bar'));
+	QUinit.equal(withArgs.returned('bar'), true);
 });
 
 QUinit.test('should delete cache after removing all observations', function () {
@@ -99,4 +99,14 @@ QUinit.test('should not drop all cache on teardown', function () {
 	c.off('change');
 	defineMap.concatArgs(1, 2, 3);
 	QUinit.equal(concatArgs.callCount, 2);
+});
+
+QUinit.test('should clean up cache tree on teardown', function () {
+	defineMap.concatArgs(1, 2, 3);
+	var c = defineMap.concatArgs(1, 'a', 'b');
+	QUinit.equal(concatArgs.callCount, 2);
+	c.on('change', function () { });
+	c.off('change');
+	var one = memoize.cache.get(defineMap).concatArgs.get(1);
+	QUinit.equal(one.has('a'), false);
 });
