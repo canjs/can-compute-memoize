@@ -5,15 +5,9 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/canjs/can-compute-memoize/blob/master/LICENSE)
 [![npm version](https://badge.fury.io/js/can-compute-memoize.svg)](https://www.npmjs.com/package/can-compute-memoize)
 [![Travis build status](https://travis-ci.org/canjs/can-compute-memoize.svg?branch=master)](https://travis-ci.org/canjs/can-compute-memoize)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/canjs/can-compute-memoize?branch=master&svg=true)](https://ci.appveyor.com/project/matthewp/can-compute-memoize)
-[![Coverage status](https://coveralls.io/repos/github/canjs/can-compute-memoize/badge.svg?branch=master)](https://coveralls.io/github/canjs/can-compute-memoize?branch=master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/canjs/can-compute-memoize.svg)](https://greenkeeper.io/)
 
 Takes a function and returns a memoized compute.
-
-## Documentation
-
-Read the [can-compute-memoize API docs on CanJS.com](https://canjs.com/doc/can-compute-memoize.html).
 
 ## Changelog
 
