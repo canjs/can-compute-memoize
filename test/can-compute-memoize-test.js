@@ -84,7 +84,7 @@ QUinit.test('should work in browsers that do not support WeekMap', function () {
 
 	loop(function () {
 		var c = defineMap.callWithArgs(foo);
-		QUnit.equal(c(), 'foo');
+		assert.equal(c(), 'foo');
 	}, 5);
 	QUinit.equal(withArgs.callCount, 5);
 
